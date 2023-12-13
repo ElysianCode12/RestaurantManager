@@ -38,35 +38,35 @@ namespace RestaurantManager.Classes
 
         public List<Reservation> FetchReservations()
         {
-            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM rm_reservation");
             List<Reservation> reservations = new List<Reservation>();
 
             string code;
             string customer;
-            string time;
-            string guests;
-            string server;
-            string table;
+            DateTime time;
+            int guests;
+            string serverID;
+            int table;
             string status;
 
             while (reader.Read())
             {
                 code = (string)reader["column1"];
                 customer  = (string)reader["column2"];
-                time = (string)reader["column3"];
-                guests = (string)reader["column4"];
-                server = (string)reader["column5"];
-                table = (string)reader["column6"];
+                time = (DateTime)reader["column3"];
+                guests = (int)reader["column4"];
+                serverID = (string)reader["column5"];
+                table = (int)reader["column6"];
                 status = (string)reader["column7"];
 
-                reservations.Add(new Reservation(code, customer, time, guests, server, table, status));
+                reservations.Add(new Reservation(code, customer, time, guests, serverID, table, status));
             }
             return reservations;
         }
 
         public List<Server> FetchServers()
         {
-            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM rm_server");
             List<Server> servers = new List<Server>();
 
             string server;
@@ -75,25 +75,25 @@ namespace RestaurantManager.Classes
 
             while (reader.Read())
             {
-                server = (string)reader["column1"];
-                serverID = (string)reader["column2"];
-                password = (string)reader["column3"];
+                server = (string)reader["name_server"];
+                serverID = (string)reader["id"];
+                password = (string)reader["password"];
 
                 servers.Add(new Server(server, serverID, password));
             }
             return servers;
         }
 
-        public List<string> FetchTables()
+        public List<int> FetchTables()
         {
-            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
-            List<string> tables = new List<string>();
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM rm_table");
+            List<int> tables = new List<int>();
 
-            string table;
+            int table;
 
             while (reader.Read())
             {
-                table = (string)reader["column"];
+                table = (int)reader["table_num"];
                 tables.Add(table);
             }
 

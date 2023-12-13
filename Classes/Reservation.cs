@@ -10,19 +10,19 @@ namespace RestaurantManager.Classes
     {
         public string ReservationCode { get; set; }
         public string CustomerName { get; set; }
-        public string ReservationTime { get; set; }
-        public string GuestAmount { get; set; }
-        public string ServerName { get; set; }
-        public string TableNumber { get; set; }
+        public DateTime ReservationTime { get; set; }
+        public int GuestAmount { get; set; }
+        public string ServerID { get; set; }
+        public int TableNumber { get; set; }
         public string Status { get; set; }
 
-        public Reservation(string code, string customer, string time, string guests, string server, string table, string status)
+        public Reservation(string code, string customer, DateTime time, int guests, string serverID, int table, string status)
         {
             this.ReservationCode = code;
             this.CustomerName = customer;
             this.ReservationTime = time;
             this.GuestAmount = guests;
-            this.ServerName = server;
+            this.ServerID = serverID;
             this.TableNumber = table;
             this.Status = status;
         }
