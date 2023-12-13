@@ -12,7 +12,7 @@ namespace RestaurantManager.Classes
 {
     internal class Database
     {
-        private string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
+        private readonly string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
 
         public OracleConnection OpenDatabase()
         {
@@ -61,8 +61,43 @@ namespace RestaurantManager.Classes
 
                 reservations.Add(new Reservation(code, customer, time, guests, server, table, status));
             }
-
             return reservations;
+        }
+
+        public List<Server> FetchServers()
+        {
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            List<Server> servers = new List<Server>();
+
+            string server;
+            string serverID;
+            string password;
+
+            while (reader.Read())
+            {
+                server = (string)reader["column1"];
+                serverID = (string)reader["column2"];
+                password = (string)reader["column3"];
+
+                servers.Add(new Server(server, serverID, password));
+            }
+            return servers;
+        }
+
+        public List<string> FetchTables()
+        {
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            List<string> tables = new List<string>();
+
+            string table;
+
+            while (reader.Read())
+            {
+                table = (string)reader["column"];
+                tables.Add(table);
+            }
+
+            return tables;
         }
     }
 }
