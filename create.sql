@@ -1,0 +1,21 @@
+CREATE TABLE rm_server (
+name_server VARCHAR2(100) NOT NULL,
+id VARCHAR2(5) CONSTRAINT SERV_ID_PK PRIMARY KEY,
+password VARCHAR2(8) CONSTRAINT SERV_PSW_UK UNIQUE
+);
+
+CREATE TABLE rm_table (
+table_num INT PRIMARY KEY
+);
+
+CREATE TABLE rm_reservation (
+name_customer VARCHAR(100) NOT NULL,
+time TIMESTAMP NOT NULL,
+num_guest INT NOT NULL,
+id VARCHAR2(5),
+name_server VARCHAR2(100),
+table_num INT,
+status VARCHAR2(10),
+CONSTRAINT RESERV_FK1 FOREIGN KEY (id) REFERENCES rm_server(id),
+CONSTRAINT RESERV_FK2 FOREIGN KEY (table_num) REFERENCES rm_table(table_num)
+);
