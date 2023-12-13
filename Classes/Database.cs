@@ -10,7 +10,7 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace RestaurantManager.Classes
 {
-    internal class Database
+    public class Database
     {
         private readonly string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
 

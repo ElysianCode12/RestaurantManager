@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantManager.Classes
 {
-    internal class Server
+    public class Server
     {
         string Name { get; set; }
         string Server_id { get; set; }
