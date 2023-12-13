@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
@@ -11,35 +12,92 @@ namespace RestaurantManager.Classes
 {
     internal class Database
     {
-        private string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
-        private string query = ""; // insert queries here;
-        public List<Reservation> reservations = new List<Reservation>();
+        private readonly string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
 
-
-        public void ReadDatabase()
+        public OracleConnection OpenDatabase()
         {
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
                 connection.Open();
+                return connection;
+            }
+        }
 
-                using (OracleCommand command = new OracleCommand(query, connection))
+        public OracleDataReader QueryDatabase(string query) 
+        {
+            OracleConnection connection = this.OpenDatabase();
+
+            using (OracleCommand command = new OracleCommand(query, connection))
+            {
+                using (OracleDataReader reader = command.ExecuteReader())
                 {
-                    this.FillLists(command);
+                    return reader;
                 }
             }
         }
 
-        public void FillLists(OracleCommand command) 
+        public List<Reservation> FetchReservations()
         {
-            using (OracleDataReader reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    Console.WriteLine($"{reader["Column1"]}, {reader["Column2"]}, {reader["Column3"]}");
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            List<Reservation> reservations = new List<Reservation>();
 
-                    // Replace Column1, Column2, Column3 with actual column names from your table.
-                }
+            string code;
+            string customer;
+            string time;
+            string guests;
+            string server;
+            string table;
+            string status;
+
+            while (reader.Read())
+            {
+                code = (string)reader["column1"];
+                customer  = (string)reader["column2"];
+                time = (string)reader["column3"];
+                guests = (string)reader["column4"];
+                server = (string)reader["column5"];
+                table = (string)reader["column6"];
+                status = (string)reader["column7"];
+
+                reservations.Add(new Reservation(code, customer, time, guests, server, table, status));
             }
+            return reservations;
+        }
+
+        public List<Server> FetchServers()
+        {
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            List<Server> servers = new List<Server>();
+
+            string server;
+            string serverID;
+            string password;
+
+            while (reader.Read())
+            {
+                server = (string)reader["column1"];
+                serverID = (string)reader["column2"];
+                password = (string)reader["column3"];
+
+                servers.Add(new Server(server, serverID, password));
+            }
+            return servers;
+        }
+
+        public List<string> FetchTables()
+        {
+            OracleDataReader reader = this.QueryDatabase("SELECT * FROM whatever the table name is");
+            List<string> tables = new List<string>();
+
+            string table;
+
+            while (reader.Read())
+            {
+                table = (string)reader["column"];
+                tables.Add(table);
+            }
+
+            return tables;
         }
     }
 }
