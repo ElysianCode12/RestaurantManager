@@ -1,0 +1,50 @@
+﻿@page "/view_reservation"
+
+
+<h2 style="display: flex; justify-content: center;">View Reservation</h2>
+
+<!--input-->
+<div style="display:flex; justify-content: left; margin-top: 15px;">
+    <label style="margin-right: 5px">Reservation Number: </label>
+    <input type="text">
+</div>
+
+
+<div style="margin-top: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center;  height: 50vh; border: solid 1px; border-color: dimgray">
+<p style="color: dimgray">-- search result --</p>
+    <!--1st row-->
+    <form style="display: flex; justify-content: center; margin-top: 10px;">
+        <div>
+            <label>Firstname: </label>
+            <input type="text" placeholder="Firstname">
+        </div>
+        <div style="margin-left: 20px;">
+            <label>Lastname: </label>
+            <input type="text" placeholder="Lastname">
+        </div>
+        <div style="margin-left: 20px;">
+            <label>Guess: </label>
+            <input type="number" placeholder="0" style="width: 40px">
+        </div>
+    </form>
+    <!--2nd row-->
+    <form style="display: flex; justify-content: center; margin-top: 20px;">
+        <div>
+            <label>Table Number: </label>
+            <input type="text" placeholder="00" style="width: 40px;">
+        </div>
+        <div style="margin-left: 20px;">
+            <label>Server Name: </label>
+            <input type="text" placeholder="Firstname Lastname">
+        </div>
+    </form>
+    <!--3rd row-->
+    <form style="margin-top: 30px;">
+        <button style="width: 200px; margin-right: 10px;">Back</button>
+        <button style="width: 200px; margin-left: 10px;">Cancel Reservation</button>
+    </form>
+</div>
+
+@code {
+
+}

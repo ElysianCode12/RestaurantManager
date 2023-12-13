@@ -1,21 +1,27 @@
 ﻿@page "/"
 
-<h1>Hello, welcome to Restaurant Manager!</h1>
+<h1 style="display: flex; justify-content: center">Welcome to Restaurant Manager</h1>
 
-<h2 style="display: flex; margin-top: 20px">log in to start</h2>
+
 <!--log in form-->
-<div style="display:flex; margin-top: 20px;">
-    <div style="width: 30%">
-        <label style="margin-right: 5px;">Username: </label>
-        <input type="text" placeholder="Firstname Lastname" style="margin-top: 5px;">
-    </div>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;  height: 50vh;">
+    <!--log in form-->
+    <form style="display:flex; justify-content: center; margin-top: 30px; margin-bottom: 30px;">
+        <div>
+            <div>
+                <label style="margin-right: 5px;">Username: </label>
+                <input type="text" placeholder="Firstname Lastname">
+            </div>
+        </div>
+        <div>
+            <div>
+                <label style="margin-right: 5px; margin-left: 10px;">Password: </label>
+                <input type="text" placeholder="*******">
+            </div>
+        </div>
+        <div>
+            <button style="margin-left: 20px; width: 150px;">Submit</button>
+        </div>
+    </form>
 </div>
-<div style="display:flex; margin-top: 10px;">
-    <div style="width: 30%">
-        <label style="margin-right: 5px;">Password: </label>
-        <input type="text" placeholder="*******" style="margin-top: 5px;">
-    </div>
-</div>
-<div style="margin-top: 20px;">
-    <button style="width: 150px;">Submit</button>
-</div>
+
