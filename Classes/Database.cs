@@ -12,7 +12,7 @@ namespace RestaurantManager.Classes
 {
     internal class Database
     {
-        private readonly string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
+        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//Ai:1521/XE;"; //insert connection details here;
 
         public OracleConnection OpenDatabase()
         {
