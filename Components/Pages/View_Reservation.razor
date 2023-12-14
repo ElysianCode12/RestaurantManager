@@ -6,7 +6,13 @@
 <!--input-->
 <div style="display:flex; justify-content: left; margin-top: 15px;">
     <label style="margin-right: 5px">Reservation Number: </label>
-    <input type="text">
+    <select type="text">
+    @foreach (string reservationcode in reservationcodes)
+        {
+            <option>@reservationcode</option>
+        }
+
+    </select>
 </div>
 
 
