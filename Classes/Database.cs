@@ -14,7 +14,7 @@ namespace RestaurantManager.Classes
     public class Database
     {
         private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//Ai:1521/XE;"; //insert connection details here;
-        
+
         public List<int> FetchTables()
         {
             List<int> tables = new List<int>();
@@ -57,6 +57,45 @@ namespace RestaurantManager.Classes
                     }
                 }
             }
+        }
+        //Fetch server name when server ID is entered
+        public List<string> FetchServerId()
+        {
+            List<string> IDs = new List<string>();
+            using (OracleConnection connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_server", connection))
+                {
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            IDs.Add(reader.GetString(1));
+                        }
+                        return IDs;
+                    }
+                }
+            }
+        }
+        public string FetchServerName(string serverId)
+        {
+            using (OracleConnection connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_server WHERE id = 'serverId'", connection))
+                {
+                    //command.Parameters.Add(new OracleParameter("serverId", serverId));
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return reader.GetString(0);
+                        }
+                    }
+                }
+            }
+            return "invalid ID. Servername not found";
         }
 
         public List<Reservation> FetchReservations() 

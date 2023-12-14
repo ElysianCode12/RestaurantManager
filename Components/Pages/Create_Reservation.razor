@@ -8,11 +8,11 @@
     <form style="display: flex; justify-content: center;">
         <div>
             <label>Name: </label>
-            <input type="text" placeholder="Firstname Lastname">
+            <input type="text" placeholder="Firstname Lastname" @bind="cus_name">
         </div>
         <div style="margin-left: 20px;">
             <label>Guests: </label>
-            <input type="number" placeholder="0" style="width: 40px">
+            <input type="number" placeholder="0" style="width: 40px" @bind="num_guest">
         </div>
         <div style="margin-left: 20px">
             <label>Table Number: </label>
@@ -28,11 +28,16 @@
     <form style="display: flex; justify-content: center; margin-top: 20px;">
         <div>
             <label>Server ID </label>
-            <input type="text" placeholder="000AA" style="width: 60px;">
+            <select type="text" placeholder="000AA" style="width: 80px;" @bind="serv_id">
+                @foreach (string ID in IDs)
+                {
+                    <option>@ID</option>
+                }
+            </select>
         </div>
         <div style="margin-left: 20px;">
             <label>Server Name: </label>
-            <input type="text" placeholder="Firstname Lastname">
+            <input type="text" placeholder="Firstname Lastname" @bind="serv_name" @oninput="FetchServerName">
         </div>
     </form>
     <!--3rd row-->
@@ -41,15 +46,29 @@
     </form>
 </div>
 
- @code {
+@code {
+
+    int tablenumber { get; set; }
+    string cus_name{ get; set; }
+    int num_guest { get; set; }
+    string serv_id { get; set; }
+    string serv_name { get; set; }
+
     Database database = new Database();
-
     List<int> tables = new List<int>();
-
-    int tablenumber;
-
+    List<string> IDs = new List<string>();
     protected override void OnInitialized()
     {
         tables = database.FetchTables();
+        IDs = database.FetchServerId();
+    }
+
+    private void FetchServerName()
+    {
+        if (!string.IsNullOrEmpty(serv_id))
+        {
+            string serv_name = database.FetchServerName(serv_id);
+
+        }
     }
 }
