@@ -83,9 +83,9 @@ namespace RestaurantManager.Classes
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
                 connection.Open();
-                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_server WHERE id = 'serverId'", connection))
+                using (OracleCommand command = new OracleCommand("SELECT name_server FROM rm_server WHERE id = :serverId", connection))
                 {
-                    //command.Parameters.Add(new OracleParameter("serverId", serverId));
+                    command.Parameters.Add(new OracleParameter("serverId", serverId));
                     using (OracleDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())

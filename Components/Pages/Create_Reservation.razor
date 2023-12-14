@@ -37,7 +37,7 @@
         </div>
         <div style="margin-left: 20px;">
             <label>Server Name: </label>
-            <input type="text" placeholder="Firstname Lastname" @bind="serv_name" @oninput="FetchServerName">
+            <input type="text" placeholder="Firstname Lastname" readonly value="@serv_name">
         </div>
     </form>
     <!--3rd row-->
@@ -67,7 +67,9 @@
     {
         if (!string.IsNullOrEmpty(serv_id))
         {
-            string serv_name = database.FetchServerName(serv_id);
+            Console.WriteLine($"Fetch server ID: {serv_id}");
+            serv_name = database.FetchServerName(serv_id);
+            Console.WriteLine($"Fetch server name: {serv_name}");
 
         }
     }
