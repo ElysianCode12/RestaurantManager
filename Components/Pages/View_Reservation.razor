@@ -47,4 +47,17 @@
 </div>
 
 @code {
+    Database database = new Database();
+    List<Reservation> reservations = new List<Reservation>();
+
+    List<string> reservationcodes = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        reservations = database.FetchReservations();
+        foreach (Reservation reservation in reservations)
+        {
+            reservationcodes.Add(reservation.ReservationCode);
+        }
+    }
 }

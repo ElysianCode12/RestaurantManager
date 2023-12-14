@@ -43,7 +43,7 @@ namespace RestaurantManager.Classes
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
                 connection.Open();
-                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_table", connection))
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_server", connection))
                 {
                     using (OracleDataReader reader = command.ExecuteReader())
                     {
@@ -65,7 +65,7 @@ namespace RestaurantManager.Classes
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
                 connection.Open();
-                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_table", connection))
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_reservation", connection))
                 {
                     using (OracleDataReader reader = command.ExecuteReader())
                     {
