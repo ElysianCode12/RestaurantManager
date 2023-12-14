@@ -11,21 +11,51 @@
         <div>
             <div>
                 <label style="margin-right: 5px;">User ID: </label>
-                <input type="text" placeholder="000AA">
+                <input type="text" placeholder="000AA" @bind="UserId">
             </div>
         </div>
         <div>
             <div>
                 <label style="margin-right: 5px; margin-left: 10px;">Password: </label>
-                <input type="text" placeholder="********">
+                <input type="password" placeholder="********" @bind="Password">
             </div>
         </div>
         <div>
-            <button style="margin-left: 20px; width: 150px;">Submit</button>
+            <button style="margin-left: 20px; width: 150px;" @onclick="Login">Submit</button>
         </div>
     </form>
 </div>
 
+<div style="display: flex; justify-content: center; margin-bottom: 10px;">
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <p style="color:darkred">@ErrorMessage</p>
+    }
+    @if (!string.IsNullOrEmpty(SuccessMessage))
+    {
+        <p style="color: darkgreen;">@SuccessMessage</p>
+    }
+</div>
+
 @code {
+    private string UserId { get; set; }
+    private string Password { get; set; }
+    private string ErrorMessage { get; set; }
+    private string SuccessMessage { get; set; }
+
+    private void Login(){
+        Database database = new Database();
+        List<Server> servers = database.FetchServers();
+
+        Server user = servers.FirstOrDefault(s => s.Server_id == UserId && s.Password == Password);
+        if (user != null){
+            SuccessMessage = "You are logged in!";
+            ErrorMessage = "";
+        }
+        else{
+            ErrorMessage = "Invalid Credentials";
+            SuccessMessage = "";
+        }
+    }
 }
 

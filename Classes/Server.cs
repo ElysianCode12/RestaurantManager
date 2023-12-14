@@ -8,9 +8,9 @@ namespace RestaurantManager.Classes
 {
     public class Server
     {
-        string Name { get; set; }
-        string Server_id { get; set; }
-        string Password { get; set; }
+        public string Name { get; set; }
+        public string Server_id { get; set; }
+        public string Password { get; set; }
 
         public Server(string name, string id, string password)
         {
