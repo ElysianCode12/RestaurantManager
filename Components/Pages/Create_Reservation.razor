@@ -1,5 +1,5 @@
 ﻿@page "/create_reservation"
-
+@using RestaurantManager.Classes
 
 <h2 style="display: flex; justify-content: center;">Create Reservation</h2>
 
@@ -11,12 +11,17 @@
             <input type="text" placeholder="Firstname Lastname">
         </div>
         <div style="margin-left: 20px;">
-            <label>Guess: </label>
+            <label>Guests: </label>
             <input type="number" placeholder="0" style="width: 40px">
         </div>
         <div style="margin-left: 20px">
             <label>Table Number: </label>
-            <input type="text" placeholder="00" style="width: 40px;">
+            <select type="text" placeholder="00" style="width: 40px;" @bind="tablenumber">
+            @foreach (int table in tables)
+            {
+                <option>@table</option>
+            }
+            </select>
         </div>
     </form>
     <!--2nd row-->
@@ -36,6 +41,15 @@
     </form>
 </div>
 
-@code {
-    
+    @code {
+    Database database = new Database();
+
+    List<int> tables = new List<int>();
+
+    int tablenumber;
+
+    protected override void OnInitialized()
+    {
+        tables = database.FetchTables();
+    }
 }
