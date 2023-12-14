@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -12,92 +13,80 @@ namespace RestaurantManager.Classes
 {
     public class Database
     {
-        private readonly string connectionString = "User Id=your_username;Password=your_password;Data Source=your_datasource;"; //insert connection details here;
-
-        public OracleConnection OpenDatabase()
+        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//DESKTOP-1TM11PF:1521/XE;"; //insert connection details here;
+        
+        public List<int> FetchTables()
         {
+            List<int> tables = new List<int>();
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
                 connection.Open();
-                return connection;
-            }
-        }
-
-        public OracleDataReader QueryDatabase(string query) 
-        {
-            OracleConnection connection = this.OpenDatabase();
-
-            using (OracleCommand command = new OracleCommand(query, connection))
-            {
-                using (OracleDataReader reader = command.ExecuteReader())
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_table", connection))
                 {
-                    return reader;
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        Console.WriteLine("Data from the table:");
+
+                        while (reader.Read())
+                        {
+                            tables.Add(reader.GetInt16(0));
+                        }
+                        return tables;
+                    }
                 }
             }
         }
 
-        public List<Reservation> FetchReservations()
-        {
-            OracleDataReader reader = this.QueryDatabase("SELECT * FROM rm_reservation");
-            List<Reservation> reservations = new List<Reservation>();
-
-            string code;
-            string customer;
-            DateTime time;
-            int guests;
-            string serverID;
-            int table;
-            string status;
-
-            while (reader.Read())
-            {
-                code = (string)reader["column1"];
-                customer  = (string)reader["column2"];
-                time = (DateTime)reader["column3"];
-                guests = (int)reader["column4"];
-                serverID = (string)reader["column5"];
-                table = (int)reader["column6"];
-                status = (string)reader["column7"];
-
-                reservations.Add(new Reservation(code, customer, time, guests, serverID, table, status));
-            }
-            return reservations;
-        }
-
         public List<Server> FetchServers()
         {
-            OracleDataReader reader = this.QueryDatabase("SELECT * FROM rm_server");
             List<Server> servers = new List<Server>();
-
-            string server;
-            string serverID;
-            string password;
-
-            while (reader.Read())
+            using (OracleConnection connection = new OracleConnection(connectionString))
             {
-                server = (string)reader["name_server"];
-                serverID = (string)reader["id"];
-                password = (string)reader["password"];
+                connection.Open();
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_table", connection))
+                {
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        Console.WriteLine("Data from the table:");
 
-                servers.Add(new Server(server, serverID, password));
+                        while (reader.Read())
+                        {
+                            servers.Add(new Server(reader.GetString(0), reader.GetString(1), reader.GetString(2)));
+                        }
+                        return servers;
+                    }
+                }
             }
-            return servers;
         }
 
-        public List<int> FetchTables()
+        public List<Reservation> FetchReservations() 
         {
-            OracleDataReader reader = this.QueryDatabase("SELECT * FROM rm_table");
-            List<int> tables = new List<int>();
-
-            int table;
-
-            while (reader.Read())
+            List<Reservation> reservations = new List<Reservation>();
+            using (OracleConnection connection = new OracleConnection(connectionString))
             {
-                table = (int)reader["table_num"];
-                tables.Add(table);
-            }
+                connection.Open();
+                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_table", connection))
+                {
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        Console.WriteLine("Data from the table:");
 
-            return tables;
+                        while (reader.Read())
+                        {
+                            reservations.Add(new Reservation(
+                                reader.GetString(0), //reservation code
+                                reader.GetString(1), //customer name
+                                reader.GetDateTime(2), //reservation date & time
+                                reader.GetInt16(3), //amount of guests
+                                reader.GetString(4), //serverID
+                                reader.GetInt16(5), //table number
+                                reader.GetString(6) //reservation status
+                                ));
+                        }
+                        return reservations;
+                    }
+                }
+            }
         }
     }
 }
