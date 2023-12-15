@@ -9,7 +9,7 @@
     <select type="text" @onchange="PopulateFields">
     @foreach (Reservation reservation in reservations)
         {
-            <option @value="reservation.ReservationCode">@reservation.ReservationCode</option>
+            <option value="@reservation.ReservationCode">@reservation.ReservationCode</option>
         }
     </select>
 </div>
@@ -26,28 +26,33 @@
         </div>
         <div style="margin-left: 20px;">
             <label>Guests: </label>
-            <input type="number" placeholder="0" style="width: 40px">
+            <input type="number" placeholder="0" style="width: 40px" @bind="num_guest">
         </div>
         <div style="margin-left: 20px;">
             <label>Status: </label>
-            <input type="text">
+            <select type="text">
+                <option>@status</option>
+                <option>reserved</option>
+                <option>done</option>
+                <option>cancelled</option>
+            </select>
         </div>
     </form>
     <!--2nd row-->
     <form style="display: flex; justify-content: center; margin-top: 20px;">
         <div>
             <label>Table Number: </label>
-            <input type="text" placeholder="00" style="width: 40px;">
+            <input type="text" placeholder="00" style="width: 40px;" @bind="table_num">
         </div>
         <div style="margin-left: 20px;">
-            <label>Server Name: </label>
-            <input type="text" placeholder="Firstname Lastname">
+            <label>Server ID: </label>
+            <input type="text" placeholder="000AA" @bind="serv_id">
         </div>
     </form>
     <!--3rd row-->
     <form style="margin-top: 30px;">
-        <button style="width: 200px; margin-right: 10px;">Back</button>
-        <button style="width: 200px; margin-left: 10px;">Cancel Reservation</button>
+        <button style="width: 200px; margin-right: 10px;">Cancel</button>
+        <button style="width: 200px; margin-left: 10px;">Confirm</button>
     </form>
 </div>
 
@@ -55,6 +60,10 @@
     Database database = new Database();
     List<Reservation> reservations = new List<Reservation>();
     string cus_name = "";
+    int num_guest;
+    string status;
+    int table_num;
+    string serv_id;
     protected override void OnInitialized()
     {
         reservations = database.FetchReservations();
@@ -67,6 +76,10 @@
             if (args.Value.ToString() == reservation.ReservationCode)
             {
                 cus_name = reservation.CustomerName;
+                num_guest = reservation.GuestAmount;
+                status = reservation.Status;
+                table_num = reservation.TableNumber;
+                serv_id = reservation.ServerID;
                 break;
             }
         }
