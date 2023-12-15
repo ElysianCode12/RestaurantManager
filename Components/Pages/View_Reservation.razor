@@ -6,12 +6,11 @@
 <!--input-->
 <div style="display:flex; justify-content: left; margin-top: 15px;">
     <label style="margin-right: 5px">Reservation Number: </label>
-    <select type="text">
-    @foreach (string reservationcode in reservationcodes)
+    <select type="text" @onchange="PopulateFields">
+    @foreach (Reservation reservation in reservations)
         {
-            <option>@reservationcode</option>
+            <option @value="reservation.ReservationCode">@reservation.ReservationCode</option>
         }
-
     </select>
 </div>
 
@@ -23,7 +22,7 @@
     <form style="display: flex; justify-content: center; margin-top: 10px;">
         <div>
             <label>Name: </label>
-            <input type="text">
+            <input type="text" @bind="cus_name">
         </div>
         <div style="margin-left: 20px;">
             <label>Guests: </label>
@@ -55,15 +54,21 @@
 @code {
     Database database = new Database();
     List<Reservation> reservations = new List<Reservation>();
-
-    List<string> reservationcodes = new List<string>();
-
+    string cus_name = "";
     protected override void OnInitialized()
     {
         reservations = database.FetchReservations();
+    }
+
+    private void PopulateFields(ChangeEventArgs args)
+    {
         foreach (Reservation reservation in reservations)
         {
-            reservationcodes.Add(reservation.ReservationCode);
+            if (args.Value.ToString() == reservation.ReservationCode)
+            {
+                cus_name = reservation.CustomerName;
+            }
+            break;
         }
     }
 }
