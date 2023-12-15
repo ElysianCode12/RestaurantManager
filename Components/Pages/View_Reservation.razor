@@ -1,4 +1,5 @@
 ﻿@page "/view_reservation"
+@inject IJSRuntime JS
 @using RestaurantManager.Classes
 
 <h2 style="display: flex; justify-content: center;">View Reservation</h2>
@@ -105,5 +106,11 @@
     private void UpdateStatus()
     {
         database.UpdateReservationStatus(res_code, status);
+        _ = ShowAlert($"Reservation is now {status}");
+    }
+
+    private async Task ShowAlert(string message)
+    {
+        await JS.InvokeVoidAsync("alert", message);
     }
 }
