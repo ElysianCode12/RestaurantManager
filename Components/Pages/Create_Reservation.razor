@@ -28,10 +28,10 @@
     <form style="display: flex; justify-content: center; margin-top: 20px;">
         <div>
             <label>Server ID </label>
-            <select type="text" placeholder="000AA" style="width: 80px;" @bind="serv_id">
-                @foreach (string ID in IDs)
+            <select type="text" placeholder="000AA" style="width: 80px;" @onchange="FindServerName">
+                @foreach (Server server in servers)
                 {
-                    <option>@ID</option>
+                    <option value="@server.Server_id">@server.Server_id</option>
                 }
             </select>
         </div>
@@ -57,20 +57,22 @@
     Database database = new Database();
     List<int> tables = new List<int>();
     List<string> IDs = new List<string>();
+    List<Server> servers = new List<Server>();
+
     protected override void OnInitialized()
     {
         tables = database.FetchTables();
-        IDs = database.FetchServerId();
+        servers = database.FetchServers();
     }
 
-    private void FetchServerName()
+    private void FindServerName(ChangeEventArgs args)
     {
-        if (!string.IsNullOrEmpty(serv_id))
+        foreach (Server server in servers)
         {
-            Console.WriteLine($"Fetch server ID: {serv_id}");
-            serv_name = database.FetchServerName(serv_id);
-            Console.WriteLine($"Fetch server name: {serv_name}");
-
+            if (args.Value.ToString() == server.Server_id)
+            {
+                serv_name = server.Name;
+            }
         }
     }
 }

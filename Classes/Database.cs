@@ -13,7 +13,7 @@ namespace RestaurantManager.Classes
 {
     public class Database
     {
-        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//Ai:1521/XE;"; //insert connection details here;
+        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//DESKTOP-1TM11PF:1521/XE;"; //insert connection details here;
 
         public List<int> FetchTables()
         {
@@ -58,45 +58,6 @@ namespace RestaurantManager.Classes
                 }
             }
         }
-        //Fetch server name when server ID is entered
-        public List<string> FetchServerId()
-        {
-            List<string> IDs = new List<string>();
-            using (OracleConnection connection = new OracleConnection(connectionString))
-            {
-                connection.Open();
-                using (OracleCommand command = new OracleCommand("SELECT * FROM rm_server", connection))
-                {
-                    using (OracleDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            IDs.Add(reader.GetString(1));
-                        }
-                        return IDs;
-                    }
-                }
-            }
-        }
-        public string FetchServerName(string serverId)
-        {
-            using (OracleConnection connection = new OracleConnection(connectionString))
-            {
-                connection.Open();
-                using (OracleCommand command = new OracleCommand("SELECT name_server FROM rm_server WHERE id = :serverId", connection))
-                {
-                    command.Parameters.Add(new OracleParameter("serverId", serverId));
-                    using (OracleDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return reader.GetString(0);
-                        }
-                    }
-                }
-            }
-            return "invalid ID. Servername not found";
-        }
 
         public List<Reservation> FetchReservations() 
         {
@@ -124,6 +85,30 @@ namespace RestaurantManager.Classes
                         }
                         return reservations;
                     }
+                }
+            }
+        }
+
+        public void AddReservation(Reservation reservation)
+        {
+            using (OracleConnection connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+
+                // Insert reservation data into rm_reservation table
+                string insertQuery = $"INSERT INTO rm_reservation VALUES (" +
+                    $"{reservation.ReservationCode}," +
+                    $"{reservation.CustomerName}, " +
+                    $"{reservation.ReservationTime}, " +
+                    $"{reservation.GuestAmount}," +
+                    $"{reservation.ServerID}," +
+                    $"{reservation.TableNumber}," +
+                    $"{reservation.Status})"; 
+
+                using (OracleCommand command = new OracleCommand(insertQuery, connection))
+                {
+                    // Execute the query
+                    command.ExecuteNonQuery();
                 }
             }
         }
