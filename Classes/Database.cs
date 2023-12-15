@@ -13,7 +13,7 @@ namespace RestaurantManager.Classes
 {
     public class Database
     {
-        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//Ai:1521/XE;"; //insert connection details here;
+        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//DESKTOP-1TM11PF:1521/XE;"; //insert connection details here;
 
         public List<int> FetchTables()
         {

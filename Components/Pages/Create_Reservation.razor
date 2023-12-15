@@ -1,5 +1,6 @@
 ﻿@page "/create_reservation"
 @using RestaurantManager.Classes
+@inject NavigationManager navigation
 
 <h2 style="display: flex; justify-content: center;">Create Reservation</h2>
 
@@ -61,6 +62,7 @@
     {
         tables = database.FetchTables();
         IDs = database.FetchServerId();
+        serv_name = navigation.GetUriWithQueryParameter()
     }
 
     private void FetchServerName()

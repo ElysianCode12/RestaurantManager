@@ -1,5 +1,7 @@
 ﻿@page "/"
+@layout Login
 @using RestaurantManager.Classes
+@inject NavigationManager navigation
 
 <h1 style="display: flex; justify-content: center">Welcome to Restaurant Manager</h1>
 
@@ -51,11 +53,17 @@
         if (user != null){
             SuccessMessage = "You are logged in!";
             ErrorMessage = "";
+            this.LoggedIn(user.Name);
         }
         else{
             ErrorMessage = "Invalid Credentials";
             SuccessMessage = "";
         }
+    }
+
+    private void LoggedIn(string name)
+    {
+        navigation.NavigateTo($"/create_reservation?parameter={name}");
     }
 }
 
