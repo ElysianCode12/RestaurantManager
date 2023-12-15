@@ -123,5 +123,31 @@ namespace RestaurantManager.Classes
                 }
             }
         }
+
+        /*public void UpdateReservationStatus(string reservationCode, string newStatus)
+        {
+            using (OracleConnection connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+                string updateQuery = "UPDATE rm_reservation SET status = :newStatus WHERE reservation_code = :reservationCode";
+
+                using (OracleCommand command = new OracleCommand(updateQuery, connection))
+                {
+                    command.Parameters.Add(new OracleParameter("newStatus", newStatus));
+                    command.Parameters.Add(new OracleParameter("reservationCode", reservationCode));
+
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (OracleException ex)
+                    {
+                       
+                    }
+                }
+            }
+        }*/
+
+
     }
 }
