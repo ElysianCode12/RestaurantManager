@@ -13,7 +13,7 @@ namespace RestaurantManager.Classes
 {
     public class Database
     {
-        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//Ai:1521/XE;"; //insert connection details here;
+        private readonly string connectionString = "User Id=cprg250;Password=password;Data Source=//DESKTOP-1TM11PF:1521/XE;"; //insert connection details here;
 
         public List<int> FetchTables()
         {
@@ -25,8 +25,6 @@ namespace RestaurantManager.Classes
                 {
                     using (OracleDataReader reader = command.ExecuteReader())
                     {
-                        Console.WriteLine("Data from the table:");
-
                         while (reader.Read())
                         {
                             tables.Add(reader.GetInt16(0));
@@ -47,8 +45,6 @@ namespace RestaurantManager.Classes
                 {
                     using (OracleDataReader reader = command.ExecuteReader())
                     {
-                        Console.WriteLine("Data from the table:");
-
                         while (reader.Read())
                         {
                             servers.Add(new Server(reader.GetString(0), reader.GetString(1), reader.GetString(2)));
@@ -69,8 +65,6 @@ namespace RestaurantManager.Classes
                 {
                     using (OracleDataReader reader = command.ExecuteReader())
                     {
-                        Console.WriteLine("Data from the table:");
-
                         while (reader.Read())
                         {
                             reservations.Add(new Reservation(
@@ -118,5 +112,16 @@ namespace RestaurantManager.Classes
             }
         }
 
+        public void UpdateReservationStatus(string reservationCode, string newStatus)
+        {
+            using (OracleConnection connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+                using (OracleCommand command = new OracleCommand($"UPDATE rm_reservation SET status = {newStatus} WHERE reservation_code = {reservationCode}", connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
