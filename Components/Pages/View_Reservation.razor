@@ -9,7 +9,7 @@
     <select type="text" @onchange="PopulateFields">
     @foreach (Reservation reservation in reservations)
         {
-            <option value="@reservation.ReservationCode">@reservation.ReservationCode</option>
+            <option @onchange="UpdateSelectedCode">@reservation.ReservationCode</option>
         }
     </select>
 </div>
@@ -30,8 +30,8 @@
         </div>
         <div style="margin-left: 20px;">
             <label>Status: </label>
-            <select type="text">
-                <option>@status</option>
+            <select type="text" @bind="selected_status">
+                <!--<option>@status</option>-->
                 <option>reserved</option>
                 <option>done</option>
                 <option>cancelled</option>
@@ -52,9 +52,11 @@
     <!--3rd row-->
     <form style="margin-top: 30px;">
         <button style="width: 200px; margin-right: 10px;">Cancel</button>
-        <button style="width: 200px; margin-left: 10px;">Confirm</button>
+        <button style="width: 200px; margin-left: 10px;" @onclick="UpdateReservation">Confirm</button>
     </form>
 </div>
+<div>@reserve_code</div>
+<div>@selected_status</div>
 
 @code {
     Database database = new Database();
@@ -63,9 +65,11 @@
     string cus_name = "";
     int num_guest;
     string status;
+    string selected_status;
     int table_num;
     string serv_id;
     string serv_name;
+    string reserve_code = "";
     protected override void OnInitialized()
     {
         reservations = database.FetchReservations();
@@ -97,6 +101,16 @@
                 break;
             }
         }
+    }
+    private void UpdateSelectedCode(ChangeEventArgs args)
+    {
+        reserve_code = args.Value.ToString();
+    }
+    private void UpdateReservation()
+    {
+        string selectedReservationCode = reserve_code;
+        Console.WriteLine(selectedReservationCode);
+        database.UpdateReservation(selectedReservationCode, selected_status);
     }
 
 }
