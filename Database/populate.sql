@@ -1,5 +1,6 @@
 SET linesize 500
 SET pagesize 60
+
 Column name_server Format A30
 Column id Format A10
 Column password Format A10

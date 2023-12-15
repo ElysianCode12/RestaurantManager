@@ -95,22 +95,28 @@ namespace RestaurantManager.Classes
             {
                 connection.Open();
 
-                // Insert reservation data into rm_reservation table
-                string insertQuery = $"INSERT INTO rm_reservation VALUES (" +
-                    $"{reservation.ReservationCode}," +
-                    $"{reservation.CustomerName}, " +
-                    $"{reservation.ReservationTime}, " +
-                    $"{reservation.GuestAmount}," +
-                    $"{reservation.ServerID}," +
-                    $"{reservation.TableNumber}," +
-                    $"{reservation.Status})"; 
+                // Use parameterized query to avoid SQL injection
+                string insertQuery = "INSERT INTO rm_reservation " +
+                    "(reservation_code, name_customer, time, num_guest, id, table_num, status) " +
+                    "VALUES " +
+                    "(:reservationCode, :nameCustomer, :reservationTime, :numGuest, :serverId, :tableNumber, :reservationStatus)";
 
                 using (OracleCommand command = new OracleCommand(insertQuery, connection))
                 {
+                    // Add parameters
+                    command.Parameters.Add("reservationCode", OracleDbType.Varchar2).Value = reservation.ReservationCode;
+                    command.Parameters.Add("nameCustomer", OracleDbType.Varchar2).Value = reservation.CustomerName;
+                    command.Parameters.Add("reservationTime", OracleDbType.TimeStamp).Value = reservation.ReservationTime;
+                    command.Parameters.Add("numGuest", OracleDbType.Int32).Value = reservation.GuestAmount;
+                    command.Parameters.Add("serverId", OracleDbType.Varchar2).Value = reservation.ServerID;
+                    command.Parameters.Add("tableNumber", OracleDbType.Int32).Value = reservation.TableNumber;
+                    command.Parameters.Add("reservationStatus", OracleDbType.Varchar2).Value = reservation.Status;
+
                     // Execute the query
                     command.ExecuteNonQuery();
                 }
             }
         }
+
     }
 }

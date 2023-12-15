@@ -1,18 +1,27 @@
 ﻿@page "/create_reservation"
 @using RestaurantManager.Classes
+@inject IJSRuntime JS
 
 <h2 style="display: flex; justify-content: center;">Create Reservation</h2>
+
+<div style="display:flex; justify-content: left; margin-top: 15px;">
+    <input type="datetime-local"
+           id="meeting-time"
+           name="meeting-time"
+           @bind="selectedDateTime"
+           min="@DateTime.Now"/>
+</div>
 
 <div style="margin-top: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center;  height: 50vh; border: solid 1px; border-color: dimgray">
     <!--1st row-->
     <form style="display: flex; justify-content: center;">
         <div>
             <label>Name: </label>
-            <input type="text" placeholder="Firstname Lastname" @bind="cus_name">
+            <input type="text" placeholder="Firstname Lastname" @bind="cus_name" required>
         </div>
         <div style="margin-left: 20px;">
             <label>Guests: </label>
-            <input type="number" placeholder="0" style="width: 40px" @bind="num_guest">
+            <input type="number" min="1" max="20" placeholder="0" style="width: 40px" @bind="num_guest">
         </div>
         <div style="margin-left: 20px">
             <label>Table Number: </label>
@@ -42,17 +51,17 @@
     </form>
     <!--3rd row-->
     <form style="display: flex; justify-content: center; margin-top: 30px;">
-    <button style="width: 150px;">Reserve</button>
+    <button style="width: 150px;" @onclick="MakeReservation">Reserve</button>
     </form>
 </div>
 
 @code {
-
-    int tablenumber { get; set; }
+    DateTime selectedDateTime;
+    int tablenumber = 1;
     string cus_name{ get; set; }
-    int num_guest { get; set; }
-    string serv_id { get; set; }
-    string serv_name { get; set; }
+    int num_guest = 1;
+    string serv_id = "001AG";
+    string serv_name = "Alice Garcia";
 
     Database database = new Database();
     List<int> tables = new List<int>();
@@ -63,6 +72,7 @@
     {
         tables = database.FetchTables();
         servers = database.FetchServers();
+        selectedDateTime = DateTime.Now;
     }
 
     private void FindServerName(ChangeEventArgs args)
@@ -74,5 +84,33 @@
                 serv_name = server.Name;
             }
         }
+    }
+
+    private void MakeReservation()
+    {
+        if (string.IsNullOrWhiteSpace(cus_name))
+        {
+            _ = ShowAlert("Please fill in required fields");
+            return;
+        }
+        else
+        {
+            string reservationcode = this.GenerateReservationCode();
+            Reservation reservation = new Reservation(reservationcode, cus_name, selectedDateTime, num_guest, serv_id, tablenumber, "reserved");
+            database.AddReservation(reservation);
+            _ = ShowAlert($"Reservation is successful! Reservation Code is {reservationcode}");
+            cus_name = "";
+        }
+    }
+
+    private string GenerateReservationCode()
+    {
+        Random random = new Random();
+        return random.Next(1000000, 10000000).ToString();
+    }
+
+    private async Task ShowAlert(string message)
+    {
+        await JS.InvokeVoidAsync("alert", message);
     }
 }
