@@ -117,11 +117,19 @@ namespace RestaurantManager.Classes
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
                 connection.Open();
-                using (OracleCommand command = new OracleCommand($"UPDATE rm_reservation SET status = {newStatus} WHERE reservation_code = {reservationCode}", connection))
+
+                // Use parameterized query to prevent SQL injection
+                string query = "UPDATE rm_reservation SET status = :newStatus WHERE reservation_code = :reservationCode";
+                using (OracleCommand command = new OracleCommand(query, connection))
                 {
+                    // Add parameters to the command
+                    command.Parameters.Add(":newStatus", OracleDbType.Varchar2).Value = newStatus;
+                    command.Parameters.Add(":reservationCode", OracleDbType.Varchar2).Value = reservationCode;
+
                     command.ExecuteNonQuery();
                 }
             }
         }
+
     }
 }

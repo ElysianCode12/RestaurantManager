@@ -9,7 +9,7 @@
     <select type="text" @onchange="PopulateFields">
     @foreach (Reservation reservation in reservations)
         {
-            <option value="@reservation.ReservationCode">@reservation.ReservationCode</option>
+            <option bind="@reservation.ReservationCode">@reservation.ReservationCode</option>
         }
     </select>
 </div>
@@ -30,7 +30,7 @@
         </div>
         <div style="margin-left: 20px;">
             <label>Status: </label>
-            <select type="text"@bind="status">
+            <select type="text" @bind="status">
                 <option>reserved</option>
                 <option>done</option>
                 <option>cancelled</option>
@@ -51,7 +51,7 @@
     <!--3rd row-->
     <form style="margin-top: 30px;">
         <button style="width: 200px; margin-right: 10px;">Cancel</button>
-        <button style="width: 200px; margin-left: 10px;" onclick="UpdateStatus" >Confirm</button>
+        <button style="width: 200px; margin-left: 10px;" @onclick="UpdateStatus" >Confirm</button>
     </form>
 </div>
 
@@ -61,12 +61,12 @@
     List<Server> servers = new List<Server>();
     string cus_name = "";
     int num_guest;
-    string status;
+    string status = "cancelled";
     int table_num;
     string serv_id;
-    string res_code;
+    string res_code = "1626520";
     string serv_name;
-      
+
     protected override void OnInitialized()
     {
         reservations = database.FetchReservations();
