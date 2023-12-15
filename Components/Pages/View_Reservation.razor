@@ -30,8 +30,7 @@
         </div>
         <div style="margin-left: 20px;">
             <label>Status: </label>
-            <select type="text">
-                <option>@status</option>
+            <select type="text"@bind="status">
                 <option>reserved</option>
                 <option>done</option>
                 <option>cancelled</option>
@@ -52,7 +51,7 @@
     <!--3rd row-->
     <form style="margin-top: 30px;">
         <button style="width: 200px; margin-right: 10px;">Cancel</button>
-        <button style="width: 200px; margin-left: 10px;">Confirm</button>
+        <button style="width: 200px; margin-left: 10px;" onclick="UpdateStatus" >Confirm</button>
     </form>
 </div>
 
@@ -64,6 +63,8 @@
     string status;
     int table_num;
     string serv_id;
+    string res_code;
+
     protected override void OnInitialized()
     {
         reservations = database.FetchReservations();
@@ -80,8 +81,14 @@
                 status = reservation.Status;
                 table_num = reservation.TableNumber;
                 serv_id = reservation.ServerID;
+                res_code = reservation.ReservationCode;
                 break;
             }
         }
+    }
+
+    private void UpdateStatus()
+    {
+        database.UpdateReservationStatus(res_code, status);
     }
 }
