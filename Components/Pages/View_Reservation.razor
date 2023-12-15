@@ -44,8 +44,8 @@
             <input type="text" placeholder="00" style="width: 40px;" @bind="table_num">
         </div>
         <div style="margin-left: 20px;">
-            <label>Server ID: </label>
-            <input type="text" placeholder="000AA" @bind="serv_id">
+            <label>Server Name: </label>
+            <input type="text" placeholder="Firstname Lastname" @bind="serv_name">
         </div>
     </form>
     <!--3rd row-->
@@ -58,18 +58,32 @@
 @code {
     Database database = new Database();
     List<Reservation> reservations = new List<Reservation>();
+    List<Server> servers = new List<Server>();
     string cus_name = "";
     int num_guest;
     string status;
     int table_num;
     string serv_id;
     string res_code;
-
+    string serv_name;
+      
     protected override void OnInitialized()
     {
         reservations = database.FetchReservations();
+        servers = database.FetchServers();
     }
 
+    private string FindServerName(string serv_id)
+    {
+        foreach (Server server in servers)
+        {
+            if (serv_id == server.Server_id)
+            {
+                return server.Name;
+            }
+        }
+        return null;
+    }
     private void PopulateFields(ChangeEventArgs args)
     {
         foreach (Reservation reservation in reservations)
@@ -82,11 +96,12 @@
                 table_num = reservation.TableNumber;
                 serv_id = reservation.ServerID;
                 res_code = reservation.ReservationCode;
+                serv_name = FindServerName(reservation.ServerID);
                 break;
             }
         }
     }
-
+      
     private void UpdateStatus()
     {
         database.UpdateReservationStatus(res_code, status);
